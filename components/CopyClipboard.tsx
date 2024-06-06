@@ -3,6 +3,7 @@
 import { useState } from "react";
 import copy from "clipboard-copy";
 import { Check, Copy, CopyCheck } from "lucide-react";
+import { Button } from "./ui/button";
 
 const CopyClipboard = ({ text }: { text: string }) => {
   const [isCopied, setIsCopied] = useState(false);
@@ -16,9 +17,9 @@ const CopyClipboard = ({ text }: { text: string }) => {
     }
   };
   return (
-    <button onClick={handleCopyClick}>
+    <Button onClick={handleCopyClick} variant={"ghost"}>
       {isCopied ? <Check className="w-6 h-6" /> : <Copy className="w-6 h-6 " />}
-    </button>
+    </Button>
   );
 };
 
