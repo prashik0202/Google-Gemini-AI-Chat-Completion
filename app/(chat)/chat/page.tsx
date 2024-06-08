@@ -125,7 +125,7 @@ export default function Home() {
             </p>
           </div>
         ))} */}
-        {conversation.toReversed().map((message, index) => (
+        {conversation.map((message, index) => (
           <div key={index}>
             <h1
               className={`text-lg my-4 ${
