@@ -22,7 +22,7 @@ const HomePage = () => {
         <div className="block md:flex my-10 gap-10">
           <Card>
             <CardHeader>
-              <CardTitle>Chart with Gemini 1.5 flash</CardTitle>
+              <CardTitle>Chat with Gemini 1.5 flash</CardTitle>
             </CardHeader>
             <CardContent>
               Start chart with gemini 1.5 flash where you can ask about image

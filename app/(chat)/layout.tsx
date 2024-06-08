@@ -3,7 +3,7 @@ import React from "react";
 
 const ChatLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="py-0 px-20">
+    <div className="py-0 px-4 md:px-20">
       {/* <Alert /> */}
       {children}
     </div>

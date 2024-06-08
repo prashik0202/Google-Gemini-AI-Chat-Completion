@@ -64,7 +64,7 @@ export default function Chat() {
     <div className="h-full flex-col py-20 w-full lg:w-1/2 lg:mx-auto items-center">
       <form
         onSubmit={handleSubmit}
-        className="w-full flex gap-x-1 items-center justify-center"
+        className=" flex gap-x-1 items-center justify-center"
       >
         <Input
           type="text"

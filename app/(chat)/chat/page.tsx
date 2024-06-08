@@ -29,8 +29,8 @@ export default function Home() {
   }
 
   return (
-    <div className="h-full flex-col py-20 w-3/4 lg:mx-auto items-center ">
-      <div className="flex gap-x-2 items-center top-10  w-full">
+    <div className="h-full flex-col py-20 w-full md:w-1/2 lg:mx-auto items-center ">
+      <div className="flex gap-x-2 items-center w-full">
         {/* <div className="flex "> */}
         <Input
           id="doc"
