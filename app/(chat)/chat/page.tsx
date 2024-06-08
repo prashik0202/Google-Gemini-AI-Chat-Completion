@@ -29,8 +29,8 @@ export default function Home() {
   }
 
   return (
-    <div className="h-full flex-col py-20 w-3/4 lg:mx-auto items-center relative">
-      <div className="flex gap-x-2 w-full items-center top-2 ">
+    <div className="h-full flex-col py-20 w-3/4 lg:mx-auto items-center ">
+      <div className="flex gap-x-2 items-center top-10  w-full">
         {/* <div className="flex "> */}
         <Input
           id="doc"
@@ -97,6 +97,7 @@ export default function Home() {
               ]);
             }
             setInput("");
+            setImageInput("");
           }}
           variant={"ghost"}
         >
@@ -124,7 +125,7 @@ export default function Home() {
             </p>
           </div>
         ))} */}
-        {conversation.map((message, index) => (
+        {conversation.toReversed().map((message, index) => (
           <div key={index}>
             <h1
               className={`text-lg my-4 ${
