@@ -13,9 +13,9 @@ import {
 
 const HomePage = () => {
   return (
-    <div className="w-full min-h-screen p-10 md:p-24 ">
+    <div className="w-full min-h-screen px-2 py-20 md:p-24 ">
       <div className="flex flex-col items-center">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl xl:text-9xl  font-semibold text-center">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl xl:text-9xl  font-semibold text-center bg-gradient-to-r from-violet-400 to-indigo-500 bg-clip-text text-transparent">
           Chat with Gemini 1.5 Flash
         </h1>
 

@@ -44,7 +44,7 @@ export async function continueConversation(history: CoreMessage[]) {
   "use server";
 
   const stream = createStreamableValue();
-  const model = google.chat("models/gemini-1.5-pro-latest");
+  const model = google.chat("models/gemini-1.5-flash-latest");
 
   (async () => {
     const { textStream } = await streamText({
@@ -59,7 +59,7 @@ export async function continueConversation(history: CoreMessage[]) {
     stream.done();
   })().then(() => {});
 
-  console.log({ history, stream });
+  // console.log({ history, stream });
   return {
     messages: history,
     newMessage: stream.value,

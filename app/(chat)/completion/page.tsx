@@ -8,6 +8,15 @@ import CopyClipboard from "@/components/CopyClipboard";
 import { Button } from "@/components/ui/button";
 import { SendHorizonal } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { exampleCompletion } from "@/constants";
+import ExampleCompletion from "@/components/ExampleCompletion";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Chat() {
   // async function callGeminiApi(prompt: string) {
@@ -84,7 +93,32 @@ export default function Chat() {
       </form>
 
       <div className="h-full mt-10 flex-col">
-        {!completion && !isLoading && <Welcome />}
+        {!completion && !isLoading && (
+          <div>
+            <Welcome />
+            {/* <div className="grid grid-flow-col gap-5 grid-rows-4 md:grid-rows-2 mt-5">
+              {exampleCompletion.map((item) => (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{item.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>{item.prompt}</CardContent>
+                  <CardFooter>
+                    <Button
+                      className="flex gap-x-2 items-center"
+                      onClick={async () => {
+                        setI;
+                      }}
+                    >
+                      <Image src={aicon} alt="icon" />
+                      Generate
+                    </Button>
+                  </CardFooter>
+                </Card>
+              ))}
+            </div> */}
+          </div>
+        )}
         <output className="text-l md:text-xl whitespace-pre-wrap flex-col gap-y-2 ">
           {completion && (
             <div className="flex justify-start gap-x-2 items-center">

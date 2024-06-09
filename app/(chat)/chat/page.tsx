@@ -29,8 +29,8 @@ export default function Home() {
   }
 
   return (
-    <div className="h-full flex-col py-20 w-full md:w-1/2 lg:mx-auto items-center ">
-      <div className="flex gap-x-2 items-center w-full">
+    <div className="h-full flex-col py-20 w-full lg:w-1/2 lg:mx-auto items-center">
+      <div className="flex-col gap-y-2 items-center w-full">
         {/* <div className="flex "> */}
         <Input
           id="doc"
@@ -46,85 +46,70 @@ export default function Home() {
               setImageInput("");
             }
           }}
-          className="w-fit shadow-lg"
-        />
-        <Input
-          type="text"
-          value={input}
-          onChange={(event) => {
-            setInput(event.target.value);
-          }}
-          className="h-12 text-xl  shadow-lg"
-          placeholder="Hello..."
+          className="w-60 shadow-lg"
         />
 
-        <Button
-          onClick={async () => {
-            // append user messages
-            const userMessages: CoreMessage[] = [];
-            if (imageInput.length) {
-              // remove data:*/*;base64 from result
-              const pureBase64 = imageInput
-                .toString()
-                .replace(/^data:image\/\w+;base64,/, "");
-              userMessages.push({
-                role: "user",
-                content: [{ type: "image", image: pureBase64 }],
-              });
-            }
-            if (input.length) {
-              userMessages.push({
-                role: "user",
-                content: [{ type: "text", text: input }],
-              });
-            }
-            const { messages, newMessage } = await continueConversation([
-              ...conversation,
-              ...userMessages,
-            ]);
+        <div className="flex ">
+          <Input
+            type="text"
+            value={input}
+            onChange={(event) => {
+              setInput(event.target.value);
+            }}
+            className="h-12 text-l md:text-xl  shadow-lg"
+            placeholder="Hello..."
+          />
 
-            // collect assistant message
-            let textContent = "";
-            for await (const delta of readStreamableValue(newMessage)) {
-              textContent = `${textContent}${delta}`;
-
-              setConversation([
-                ...messages,
-                {
-                  role: "assistant",
-                  content: [{ type: "text", text: textContent }],
-                },
+          <Button
+            onClick={async () => {
+              // append user messages
+              const userMessages: CoreMessage[] = [];
+              if (imageInput.length) {
+                // remove data:*/*;base64 from result
+                const pureBase64 = imageInput
+                  .toString()
+                  .replace(/^data:image\/\w+;base64,/, "");
+                userMessages.push({
+                  role: "user",
+                  content: [{ type: "image", image: pureBase64 }],
+                });
+              }
+              if (input.length) {
+                userMessages.push({
+                  role: "user",
+                  content: [{ type: "text", text: input }],
+                });
+              }
+              const { messages, newMessage } = await continueConversation([
+                ...conversation,
+                ...userMessages,
               ]);
-            }
-            setInput("");
-            setImageInput("");
-          }}
-          variant={"ghost"}
-        >
-          <SendHorizonal className="text-slate-500" />
-        </Button>
+
+              // collect assistant message
+              let textContent = "";
+              for await (const delta of readStreamableValue(newMessage)) {
+                textContent = `${textContent}${delta}`;
+
+                setConversation([
+                  ...messages,
+                  {
+                    role: "assistant",
+                    content: [{ type: "text", text: textContent }],
+                  },
+                ]);
+              }
+              setInput("");
+              setImageInput("");
+            }}
+            variant={"ghost"}
+          >
+            <SendHorizonal className="text-slate-500" />
+          </Button>
+        </div>
         {/* </div> */}
       </div>
 
       <div className="w-full mt-10">
-        {/* {conversation.map((message, index) => (
-          <div key={index} className="flex flex-col p-5  gap-y-2">
-            <h1
-              className={`text-l my-1 ${
-                message.role === "user" ? "" : "text-blue-500"
-              }`}
-            >
-              {message.role === "user" ? "You" : "AI"}
-            </h1>
-            <p
-              className={`text-xl text-slate-600 py-3 px-4 max-w-fit max-h-fit rounded-md  whitespace-pre-wrap ${
-                message.role === "user" ? "bg-slate-200" : "bg-sky-100"
-              } shadow-lg`}
-            >
-              {message.content}
-            </p>
-          </div>
-        ))} */}
         {conversation.map((message, index) => (
           <div key={index}>
             <h1
@@ -134,7 +119,6 @@ export default function Home() {
             >
               {message.role === "user" ? "You" : "AI"}
             </h1>
-            {/* {message.role}:{" "} */}
             {
               // if it's string, just show it, else if it is image, preview image, if it is text, show the text
               typeof message.content === "string" ? (
