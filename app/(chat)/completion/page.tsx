@@ -75,20 +75,20 @@ export default function Chat() {
     <div className="min-h-screen flex-col pt-20 w-full lg:w-1/2 lg:mx-auto items-center">
       <form
         onSubmit={handleSubmit}
-        className=" flex gap-x-1 items-center justify-center"
+        className=" flex gap-x-1 items-center justify-center bg-neutral-200 p-2 rounded-md"
       >
         <Input
           type="text"
           value={input}
           onChange={handleInputChange}
           placeholder="Enter your prompt"
-          className="w-full outline-none shadow-xl h-12 active:border-none  text-l md:text-xl"
+          className="w-full outline-none active:border-none  text-sm bg-transparent"
         />
         <Button
           type="submit"
           disabled={isLoading}
           variant={"ghost"}
-          className="shadow-xl"
+          className="bg-transparent"
         >
           <SendHorizonal className="text-slate-500" />
         </Button>
@@ -106,7 +106,7 @@ export default function Chat() {
             <Welcome />
           </div>
         )}
-        <output className="text-sm md:text-xl whitespace-pre-wrap flex-col">
+        <output className="text-sm whitespace-pre-wrap flex-col">
           <ReactMarkdown>{completion}</ReactMarkdown>
         </output>
       </div>

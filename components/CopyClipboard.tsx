@@ -18,7 +18,7 @@ const CopyClipboard = ({ text }: { text: string }) => {
   };
   return (
     <Button onClick={handleCopyClick} variant={"ghost"}>
-      {isCopied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5 " />}
+      {isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4 " />}
     </Button>
   );
 };
