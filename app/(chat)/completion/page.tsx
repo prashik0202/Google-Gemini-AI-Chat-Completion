@@ -17,6 +17,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import ReactMarkdown from "react-markdown";
+import React from "react";
 
 export default function Chat() {
   // async function callGeminiApi(prompt: string) {
@@ -70,7 +72,7 @@ export default function Chat() {
   });
 
   return (
-    <div className="h-full flex-col py-20 w-full lg:w-1/2 lg:mx-auto items-center">
+    <div className="min-h-screen flex-col pt-20 w-full lg:w-1/2 lg:mx-auto items-center">
       <form
         onSubmit={handleSubmit}
         className=" flex gap-x-1 items-center justify-center"
@@ -92,41 +94,20 @@ export default function Chat() {
         </Button>
       </form>
 
-      <div className="h-full mt-10 flex-col">
+      {completion && (
+        <div className="flex justify-start gap-x-2 items-center mt-2">
+          <Image src={aicon} alt="icon" className="my-4 h-6 w-6" />
+          <CopyClipboard text={completion} />
+        </div>
+      )}
+      <div className="h-[calc(100vh-30vh)] mt-0 flex-col overflow-y-auto">
         {!completion && !isLoading && (
-          <div>
+          <div className="mt-10">
             <Welcome />
-            {/* <div className="grid grid-flow-col gap-5 grid-rows-4 md:grid-rows-2 mt-5">
-              {exampleCompletion.map((item) => (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{item.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>{item.prompt}</CardContent>
-                  <CardFooter>
-                    <Button
-                      className="flex gap-x-2 items-center"
-                      onClick={async () => {
-                        setI;
-                      }}
-                    >
-                      <Image src={aicon} alt="icon" />
-                      Generate
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div> */}
           </div>
         )}
-        <output className="text-l md:text-xl whitespace-pre-wrap flex-col gap-y-2 ">
-          {completion && (
-            <div className="flex justify-start gap-x-2 items-center">
-              <Image src={aicon} alt="icon" className="my-4 h-6 w-6" />
-              <CopyClipboard text={completion} />
-            </div>
-          )}
-          {completion}
+        <output className="text-sm md:text-xl whitespace-pre-wrap flex-col">
+          <ReactMarkdown>{completion}</ReactMarkdown>
         </output>
       </div>
     </div>

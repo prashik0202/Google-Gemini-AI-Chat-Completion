@@ -13,18 +13,18 @@ import {
 
 const HomePage = () => {
   return (
-    <div className="w-full min-h-screen px-2 py-20 md:p-24 ">
+    <div className="w-full min-h-screen flex flex-col items-center justify-center">
       <div className="flex flex-col items-center">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl xl:text-9xl  font-semibold text-center bg-gradient-to-r from-violet-400 to-indigo-500 bg-clip-text text-transparent">
+        <h1 className="text-4xl md:text-7xl font-semibold text-center bg-gradient-to-r from-violet-400 to-indigo-500 bg-clip-text text-transparent">
           Chat with Gemini 1.5 Flash
         </h1>
 
         <div className="block md:flex my-10 gap-10">
-          <Card>
+          <Card className="w-96">
             <CardHeader>
-              <CardTitle>Chat with Gemini 1.5 flash</CardTitle>
+              <CardTitle>Chat</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="text-sm">
               Start chart with gemini 1.5 flash where you can ask about image
               and also chat like a human
             </CardContent>
@@ -38,11 +38,11 @@ const HomePage = () => {
               </Button>
             </CardFooter>
           </Card>
-          <Card>
+          <Card className="w-96">
             <CardHeader>
-              <CardTitle>Text Completion with Gemini 1.5 flash</CardTitle>
+              <CardTitle>Text Completion</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="text-sm">
               Experience with text completion where it boost the user
               productivity and help full in daily task
             </CardContent>

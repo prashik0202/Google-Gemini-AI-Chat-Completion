@@ -8,6 +8,7 @@ import { SendHorizonal, Upload } from "lucide-react";
 import { CoreMessage } from "ai";
 import { readStreamableValue } from "ai/rsc";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
 
 // Force the page to be dynamic and allow streaming responses up to 30 seconds
 export const dynamic = "force-dynamic";
@@ -49,7 +50,7 @@ export default function Home() {
           className="w-60 shadow-lg"
         />
 
-        <div className="flex ">
+        <div className="flex">
           <Input
             type="text"
             value={input}
@@ -109,11 +110,11 @@ export default function Home() {
         {/* </div> */}
       </div>
 
-      <div className="w-full mt-10">
+      <div className="w-full mt-5 h-[calc(100vh-30vh)] overflow-y-auto p-0 md:p-10">
         {conversation.map((message, index) => (
           <div key={index}>
             <h1
-              className={`text-lg my-4 ${
+              className={`text-sm md:text-lg my-4 ${
                 message.role === "user" ? "text-slate-500" : "text-sky-400"
               }`}
             >
@@ -134,11 +135,11 @@ export default function Home() {
                 />
               ) : message.content[0].type === "text" ? (
                 <p
-                  className={`text-xl whitespace-pre-wrap max-w-fit p-5 rounded-lg ${
-                    message.role === "user" ? "bg-sky-100" : "bg-pink-100"
+                  className={`text-sm md:text-xl whitespace-pre-wrap max-w-fit p-5 rounded-lg ${
+                    message.role === "user" ? "bg-sky-100" : "bg-purple-100"
                   }`}
                 >
-                  {message.content[0].text}
+                  <ReactMarkdown>{message.content[0].text}</ReactMarkdown>
                 </p>
               ) : (
                 ""
