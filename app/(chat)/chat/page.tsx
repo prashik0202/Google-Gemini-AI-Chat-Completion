@@ -10,6 +10,8 @@ import { readStreamableValue } from "ai/rsc";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import CopyClipboard from "@/components/CopyClipboard";
+import { Textarea } from "@/components/ui/textarea";
+import aicon from "../../google-gemini-icon.svg";
 
 // Force the page to be dynamic and allow streaming responses up to 30 seconds
 export const dynamic = "force-dynamic";
@@ -41,9 +43,51 @@ export default function Home() {
     });
   }
 
+  // handling button pressed
+  async function handleSubmitButton() {
+    // append user messages
+    const userMessages: CoreMessage[] = [];
+    if (imageInput.length) {
+      // remove data:*/*;base64 from result
+      const pureBase64 = imageInput
+        .toString()
+        .replace(/^data:image\/\w+;base64,/, "");
+      userMessages.push({
+        role: "user",
+        content: [{ type: "image", image: pureBase64 }],
+      });
+    }
+    if (input.length) {
+      userMessages.push({
+        role: "user",
+        content: [{ type: "text", text: input }],
+      });
+    }
+    const { messages, newMessage } = await continueConversation([
+      ...conversation,
+      ...userMessages,
+    ]);
+
+    // collect assistant message
+    let textContent = "";
+    for await (const delta of readStreamableValue(newMessage)) {
+      textContent = `${textContent}${delta}`;
+
+      setConversation([
+        ...messages,
+        {
+          role: "assistant",
+          content: [{ type: "text", text: textContent }],
+        },
+      ]);
+    }
+    setInput("");
+    setImageInput("");
+  }
+
   return (
-    <div className="min-h-screen flex-col pt-20 md:pt-10 w-full md:max-w-3xl lg:mx-auto items-center justify-between gap-3">
-      <div className="w-full mt-5 h-[calc(100vh-30vh)] md:h-[calc(100vh-20vh)] overflow-y-auto p-0 md:p-2">
+    <div className="min-h-screen flex-col pt-10  w-full md:max-w-3xl lg:mx-auto items-center justify-between gap-3">
+      <div className="w-full mt-5 h-[calc(100vh-30vh)] md:h-[calc(100vh-25vh)] overflow-y-auto p-0 md:p-2">
         {conversation.map((message, index) => (
           <div key={index}>
             <h1
@@ -51,7 +95,11 @@ export default function Home() {
                 message.role === "user" ? "text-slate-500" : "text-sky-400"
               }`}
             >
-              {message.role === "user" ? "You" : "AI"}
+              {message.role === "user" ? (
+                "You"
+              ) : (
+                <Image src={aicon} alt="icon" className="my-4 h-6 w-6" />
+              )}
             </h1>
             {
               // if it's string, just show it, else if it is image, preview image, if it is text, show the text
@@ -68,8 +116,10 @@ export default function Home() {
                 />
               ) : message.content[0].type === "text" ? (
                 <p
-                  className={`text-sm whitespace-pre-wrap max-w-fit p-4 rounded-lg ${
-                    message.role === "user" ? "bg-sky-100" : "bg-purple-100"
+                  className={`text-sm whitespace-pre-wrap max-w-fit p-4 rounded-lg text-white ${
+                    message.role === "user"
+                      ? "bg-neutral-800 "
+                      : "bg-neutral-900"
                   }`}
                 >
                   {message.role !== "user" && (
@@ -86,8 +136,8 @@ export default function Home() {
           </div>
         ))}
         {conversation.length === 0 && (
-          <div className="bg-neutral-900 rounded-md w-full h-72 p-10 shadow-lg text-white">
-            <h1 className="text-3xl text-center">Welcome to Gemini Chat</h1>
+          <div className="bg-neutral-200 rounded-md w-full h-fit p-10 shadow-lg">
+            <h1 className="text-4xl text-center">Welcome to Gemini Chat</h1>
             <p className="text-center text-gray-4 text-sm mt-8">
               you can chat with ai model ask question and get your desire
               output.
@@ -100,60 +150,17 @@ export default function Home() {
         <div ref={ref} />
       </div>
 
-      <div className="flex bg-neutral-200 rounded-md items-center p-2 shadow-xl mt-2">
-        <Input
-          type="text"
+      <div className="flex bg-neutral-200 rounded-md items-center p-4 shadow-xl mt-2 h-32 pb-4">
+        <Textarea
           value={input}
           onChange={(event) => {
             setInput(event.target.value);
           }}
-          className="text-sm bg-transparent outline-none"
+          className="text-sm bg-transparent outline-none resize-none"
           placeholder="Type here..."
         />
 
-        <Button
-          onClick={async () => {
-            // append user messages
-            const userMessages: CoreMessage[] = [];
-            if (imageInput.length) {
-              // remove data:*/*;base64 from result
-              const pureBase64 = imageInput
-                .toString()
-                .replace(/^data:image\/\w+;base64,/, "");
-              userMessages.push({
-                role: "user",
-                content: [{ type: "image", image: pureBase64 }],
-              });
-            }
-            if (input.length) {
-              userMessages.push({
-                role: "user",
-                content: [{ type: "text", text: input }],
-              });
-            }
-            const { messages, newMessage } = await continueConversation([
-              ...conversation,
-              ...userMessages,
-            ]);
-
-            // collect assistant message
-            let textContent = "";
-            for await (const delta of readStreamableValue(newMessage)) {
-              textContent = `${textContent}${delta}`;
-
-              setConversation([
-                ...messages,
-                {
-                  role: "assistant",
-                  content: [{ type: "text", text: textContent }],
-                },
-              ]);
-            }
-            setInput("");
-            setImageInput("");
-          }}
-          variant={"ghost"}
-        >
+        <Button onClick={handleSubmitButton} variant={"ghost"}>
           <SendHorizonal className="text-black h-6 w-6" />
         </Button>
         <label
@@ -176,23 +183,36 @@ export default function Home() {
           </svg>
 
           {/* <Input type="file" id="" /> */}
-          <Input
-            id="uploadFile1"
-            type="file"
-            onChange={(event) => {
-              if (event.target.files) {
-                const file = event.target.files[0];
-                getBase64(file).then((result) => {
-                  setImageInput(result);
-                  // setInput(result);
-                });
-              } else {
-                setImageInput("");
-              }
-            }}
-            className="hidden"
-          />
         </label>
+        {imageInput ? (
+          <img
+            src={imageInput}
+            alt=""
+            className="h-12 md:h-28  w-12 md:w-28 object-contain"
+          />
+        ) : (
+          <img
+            src={"https://placehold.jp/112x112.png"}
+            alt=""
+            className="h-12 md:h-28  w-12 md:w-28 object-contain "
+          />
+        )}
+
+        <Input
+          id="uploadFile1"
+          type="file"
+          onChange={(event) => {
+            if (event.target.files) {
+              const file = event.target.files[0];
+              getBase64(file).then((result) => {
+                setImageInput(result);
+              });
+            } else {
+              setImageInput("");
+            }
+          }}
+          className="hidden"
+        />
       </div>
     </div>
   );
